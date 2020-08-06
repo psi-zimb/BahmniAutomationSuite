@@ -27,7 +27,7 @@ step("Page contains <content>", async (content) => {
 });
 
 step("Goto Bahmni page", async () => {
-   await goto(process.env.link);
+   await goto(process.env.LINK);
    await waitFor(2000);
 });
 
