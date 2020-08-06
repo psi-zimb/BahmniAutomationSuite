@@ -45,7 +45,7 @@ step("Click on Clinical Service", async () => {
  });
   
  step("Select Location", async () => {
-     await dropDown('Location').select('Gweru Clinic');
+     await dropDown('Location').select('NAH Clinic');
  });
   
  step("Click on Login button", async () => {
