@@ -36,11 +36,11 @@ step("Click on Clinical Service", async () => {
  });
   
  step("Enter Username", async () => {
-    await write(process.env.USERNAME,into(textBox({placeholder: locators.Details.Username})));
+    await write(data.Registration.username,into(textBox({placeholder: locators.Details.Username})));
  });
   
  step("Enter Password", async () => {
-    await write(process.env.PASSWORD,into(textBox({placeholder: locators.Details.Password})));
+    await write(data.Registration.password,into(textBox({placeholder: locators.Details.Password})));
  });
   
  step("Select Location", async () => {
