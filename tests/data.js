@@ -2,6 +2,7 @@ let identifier;
 class data {
    constructor() {
    this.Registration = {
+       link : 'https://dev-91.digitalhealthunit.org/', 
        patientID: 'NAHA150000000001',
        fees: '200',    
        date: '02012008',    
