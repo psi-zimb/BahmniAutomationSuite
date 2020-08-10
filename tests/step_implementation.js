@@ -11,13 +11,13 @@ beforeSuite(async () => {
     data = require("./data");
     locators = require("./locators");
     identifier = data.Registration.patientID;
+    require('dotenv').config();
 });
 
 afterSuite(async () => {
     await closeBrowser();
 });
-//gauge run --env dev specs 
-//gauge run --env dev specs/example.spec
+
 gauge.screenshotFn = async function() {
     return await screenshot({ encoding: 'base64' });
 };
@@ -36,6 +36,7 @@ step("Click on Clinical Service", async () => {
  });
   
  step("Enter Username", async () => {
+    console.log("USERNAME : "+process.env.USERNAME);
     await write(process.env.USERNAME,into(textBox({placeholder: locators.Details.Username})));
  });
   
@@ -44,10 +45,11 @@ step("Click on Clinical Service", async () => {
  });
   
  step("Select Location", async () => {
-     await dropDown('Location').select('NAH Clinic');
+    await dropDown('Location').select({index:'3'});
  });
   
  step("Click on Login button", async () => {
+    await waitFor(500);
     await click(button('Login'));
  });
  
@@ -426,7 +428,9 @@ step("Filling the Gynecology form2", async () => {
     await click(button("Yes"),near("Are you or partner currently breast feeding?"));
     await click(button("No"),below("Injection"));
     await click(button("Other"),near("Are you taking any drugs or medications?",{offset:500}))
-    await write('Some drugs',into($("textarea#observation_21")));
+    await press("Tab");
+    await press("Tab");
+    await write('Some drugs');
  });
   
  step("Filling details of relationship details, HIV status of partner, usage of condoms and other details of patient in PrEP Initial form", async () => {
@@ -558,8 +562,8 @@ step("Filling the Gynecology form2", async () => {
  });
   
  step("Filling the dates of medication resupply of patient in PrEP Continuation form", async () => {
-    await click(button("Follow-up visit 5 at "),below("Follow-up visit1"));
-    await click(button("5 Months "),below("1"));
+    await click(button("Follow-up visit 5 at 4 months"),below("Follow-up visit1"));
+    await click(button("5 Months "),below("1 month or less"));
     await press("Tab");
     await press("Tab");
     await press("Tab");
@@ -610,6 +614,14 @@ step("Filling the Gynecology form2", async () => {
     await click(button("Yes"),near("Diabetes management – non-gestational"));
  });
   
+ step("Checking details of service provided and screening details of hypertension, Type 2 diabetes of patient in the NCD form", async () => {
+   assert.ok(await text("Facility",below("NCD Form")).exists());
+   assert.ok(await text("MAC",toRightOf("Facility"),below("NCD Form")).exists());
+   assert.ok(await text("Site Type",below("NCD Form")).exists());
+   assert.ok(await text("Yes",toRightOf("Site Type")).exists());
+   
+ });
+
  step("Filling details of service provided of patient in the IPV form", async () => {
     await waitFor(5000);
     await click($("div.field-value"));
@@ -627,6 +639,32 @@ step("Filling the Gynecology form2", async () => {
     await click(button("No"),near("Partner ever threatened to Kill you?",{offset:500}));
  });
   
+ step("Checking replication of service provided of patient in the IPV form", async () => {
+    await waitFor(1000);
+    assert.ok(await text("Facility",below("Form")).exists());
+    assert.ok(await text("MAC",below("IPV Form")).exists());
+    assert.ok(await text("Site Type",below("IPV Form")).exists());
+    assert.ok(await text("Static",below("IPV Form")).exists());
+    assert.ok(await text("Setting",below("IPV Form")).exists());
+ });
+
+ step("Checking replication of details regarding physical abuse on patient in the IPV form", async () => {
+   assert.ok(await text("Urban",below("IPV Form")).exists());
+   assert.ok(await text("Has partner ever threatened to hurt you?",below("IPV Form")).exists());
+   assert.ok(await text("Yes",toRightOf("Has partner ever threatened to hurt you?")).exists());
+   assert.ok(await text("Partner ever physically hurt you?",below("IPV Form")).exists());
+   assert.ok(await text("Yes",toRightOf("Partner ever physically hurt you?")).exists());
+ });
+
+ step("Checking replication of details regarding sexual abuse on patient in the IPV form", async () => {
+   assert.ok(await text("Partner ever sexually abused you?",below("IPV Form")).exists());
+   assert.ok(await text("Yes",toRightOf("Partner ever sexually abused you?")).exists());
+   assert.ok(await text("Partner ever threatened you?",below("IPV Form")).exists());
+   assert.ok(await text("Yes",toRightOf("Partner ever threatened you?")).exists());
+   assert.ok(await text("Partner ever threatened to Kill you?",below("IPV Form")).exists());
+   assert.ok(await text("Yes",toRightOf("Partner ever threatened to Kill you?")).exists());
+ });
+
  step("Filling details of type of plan and assessment, activity status and dates of reinitiation of patient in the Assessment and Plan form", async () => {
     await waitFor(5000);
     await click(button("Phone Call"));
@@ -1059,7 +1097,7 @@ step("Filling the Gynecology form2", async () => {
   
  step("Asking patient if received Economic Strengthening Services and Educational services Services in Referrals Template form", async () => {
     await click(button("Yes"),near("Received Economic Strengthening Services"));
-    await click(button("Yes"),near("Received Educational services Services"));
+    await click(button("Yes"),near("Received Educational Services"));
  });
   
  step("Asking patient if received Emergency Shelter Services and Nutrition Support Services in Referrals Template form", async () => {
@@ -1195,5 +1233,57 @@ step("Filling the Gynecology form2", async () => {
      console.log(content+" is replicated");
  });
   
-  
+ step("Click on Appointment Scheduling", async () => {
+   await waitFor(1000);
+   await click("Appointment Scheduling");
+ });
+
+ step("Click on Appointments List", async () => {
+   await waitFor(1000);
+   await click("Appointments List");
+ }); 
+
+ step("Click on Add new appointment", async () => {
+   await waitFor(1000);
+   await click("Add new appointment");
+ }); 
  
+ step("Filling details like patient Id, service and provider for appointment", async () => {
+   await waitFor(1000);
+   await write("NAHA10000000015",into(textBox({placeholder:"Patient Name or ID"})));
+   await waitFor(1000);
+   await click("NAHA10000000015");
+   await dropDown('Service').select({index:'1'});
+   await dropDown('Provider').select({index:'1'});
+ }); 
+
+ step("Filling details like date and time of appointment for appointment", async () => {
+   await press("Tab");
+   await press("Tab");
+   await press("Tab");
+   await press("Tab");
+  // console.log("Date : "+data.Registration.settingDate);
+   await write("10102020");
+   await press("Tab");
+   await write("01:00 pm");
+   await click("01:00 pm");
+   await press("Tab");
+   await write("01:30 pm");
+   await waitFor(2000);
+   await highlight("Save");
+   await click("Save");
+ });
+
+ step("Going back to home page from patient dashboard", async () => {
+await waitFor(1000);
+await click($("a.back-btn"));
+await waitFor(1000);
+await click($("a.back-btn"));
+ });
+
+ step("Click on proceed and save", async () => {
+   await waitFor(2000);
+    if(await button("Proceed and save").exists()){
+        await click(button("Proceed and save"));
+    }
+});
