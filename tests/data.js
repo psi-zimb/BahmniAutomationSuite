@@ -2,10 +2,6 @@ let identifier;
 class data {
    constructor() {
    this.Registration = {
-       link : '$link', 
-       username : '$username', 
-       password : '$password', 
-       patientID: '$ID',
        fees : '200',    
        date : '02012008',    
        makeid(length) {
