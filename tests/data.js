@@ -2,10 +2,10 @@ let identifier;
 class data {
    constructor() {
    this.Registration = {
-       link : 'https://dev-91.digitalhealthunit.org/', 
-       username : 'superman', 
-       password : 'Admin123', 
-       patientID: 'NAHA150000000001',
+       link : '$link', 
+       username : '$username', 
+       password : '$password', 
+       patientID: '$ID',
        fees : '200',    
        date : '02012008',    
        makeid(length) {
